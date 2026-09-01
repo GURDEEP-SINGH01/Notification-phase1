@@ -27,4 +27,6 @@ public class NotificationDTO {
     private boolean read;
 
     private LocalDateTime createdAt;
+
+    private LocalDateTime expiresAt;
 }

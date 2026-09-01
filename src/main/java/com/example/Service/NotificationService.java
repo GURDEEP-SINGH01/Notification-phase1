@@ -4,17 +4,22 @@ import com.example.DTO.NotificationDTO;
 import com.example.Entity.Notification;
 import com.example.Exception.NotificationNotFoundException;
 import com.example.Repository.NotificationRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
+
+    @Value("${notification.ttl.minutes}")
+    private long ttlMinutes;
 
     public NotificationService(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
@@ -27,6 +32,7 @@ public class NotificationService {
         notification.setMessage(notificationDTO.getMessage());
         notification.setType(notificationDTO.getType());
         notification.setRead(notificationDTO.isRead());
+        notification.setExpiresAt( LocalDateTime.now().plusMinutes(ttlMinutes));
 
         Notification saved = notificationRepository.save(notification);
 
@@ -38,6 +44,7 @@ public class NotificationService {
         response.setType(saved.getType());
         response.setRead(saved.isRead());
         response.setCreatedAt(saved.getCreatedAt());
+        response.setExpiresAt(saved.getExpiresAt());
 
         return response;
     }
@@ -57,6 +64,7 @@ public class NotificationService {
                     dto.setType(notification.getType());
                     dto.setRead(notification.isRead());
                     dto.setCreatedAt(notification.getCreatedAt());
+                    dto.setExpiresAt(notification.getExpiresAt());
 
                     return dto;
                 });
@@ -78,6 +86,7 @@ public class NotificationService {
         dto.setType(notification.getType());
         dto.setRead(notification.isRead());
         dto.setCreatedAt(notification.getCreatedAt());
+        dto.setExpiresAt(notification.getExpiresAt());
 
         return dto;
     }

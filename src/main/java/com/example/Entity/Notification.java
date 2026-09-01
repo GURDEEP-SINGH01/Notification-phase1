@@ -3,8 +3,10 @@ package com.example.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Getter
@@ -25,10 +27,11 @@ public class Notification {
     private boolean read;
 
     private LocalDateTime createdAt;
+    private LocalDateTime expiresAt;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        createdAt = LocalDateTime.now().atZone(ZoneId.of("Asia/Kolkata")).toLocalDateTime();
     }
 
 }
