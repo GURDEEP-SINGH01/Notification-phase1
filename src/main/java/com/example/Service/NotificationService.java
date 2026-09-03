@@ -3,12 +3,12 @@ package com.example.Service;
 import com.example.DTO.NotificationDTO;
 import com.example.Entity.Notification;
 import com.example.Exception.NotificationNotFoundException;
+import com.example.Kafka.KafkaNotificationProducer;
 import com.example.Repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,12 +17,14 @@ import java.util.List;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private final KafkaNotificationProducer kafkaNotificationProducer;
 
     @Value("${notification.ttl.minutes}")
     private long ttlMinutes;
 
-    public NotificationService(NotificationRepository notificationRepository) {
+    public NotificationService(NotificationRepository notificationRepository,KafkaNotificationProducer kafkaNotificationProducer) {
         this.notificationRepository = notificationRepository;
+        this.kafkaNotificationProducer=kafkaNotificationProducer;
     }
 
     public NotificationDTO createNotification(NotificationDTO notificationDTO) throws NotificationNotFoundException {
@@ -45,6 +47,10 @@ public class NotificationService {
         response.setRead(saved.isRead());
         response.setCreatedAt(saved.getCreatedAt());
         response.setExpiresAt(saved.getExpiresAt());
+
+        // Send the saved notification to Kafka
+        // convert notification dto to Notification (optimization)
+        kafkaNotificationProducer.sendNotification(response);
 
         return response;
     }
