@@ -1,6 +1,7 @@
 package com.example.Kafka;
 
 import com.example.DTO.NotificationDTO;
+import com.example.Event.NotificationEvent;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -11,15 +12,15 @@ public class KafkaNotificationConsumer {
             topics = "notification-events",
             groupId = "notification-group"
     )
-    public void consume(NotificationDTO notification) {
+    public void consume(NotificationEvent notificationEvent) {
 
         System.out.println(
                 "Received notification from Kafka for user: "
-                        + notification.getUserId()
+                        + notificationEvent.getUserId()
         );
 
         System.out.println(
-                "Message: " + notification.getMessage()
+                "Message: " + notificationEvent.getMessage()
         );
     }
 }

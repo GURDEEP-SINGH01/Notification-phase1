@@ -2,6 +2,7 @@ package com.example.Service;
 
 import com.example.DTO.NotificationDTO;
 import com.example.Entity.Notification;
+import com.example.Event.NotificationEvent;
 import com.example.Exception.NotificationNotFoundException;
 import com.example.Kafka.KafkaNotificationProducer;
 import com.example.Repository.NotificationRepository;
@@ -50,7 +51,13 @@ public class NotificationService {
 
         // Send the saved notification to Kafka
         // convert notification dto to Notification (optimization)
-        kafkaNotificationProducer.sendNotification(response);
+        NotificationEvent event = new NotificationEvent(
+                saved.getId(),
+                saved.getUserId(),
+                saved.getMessage(),
+                saved.getType()
+        );
+        kafkaNotificationProducer.sendNotification(event);
 
         return response;
     }
