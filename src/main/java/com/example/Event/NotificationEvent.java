@@ -18,5 +18,8 @@ public class NotificationEvent {
 
     private String message;
 
-    private String type;
+    private String channel;
+
+    private String category;
+
 }

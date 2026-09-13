@@ -22,7 +22,9 @@ public class Notification {
 
     private String message;
 
-    private String type;
+    private String channel;
+
+    private String category;
 
     private boolean read;
 

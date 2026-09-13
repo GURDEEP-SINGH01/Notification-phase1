@@ -8,7 +8,7 @@ public class NotificationDispatcher {
 
     public void dispatch(NotificationEvent event) {
 
-        switch (event.getType()) {
+        switch (event.getChannel()) {
 
             case "EMAIL":
                 sendEmail(event);
@@ -24,8 +24,8 @@ public class NotificationDispatcher {
 
             default:
                 throw new IllegalArgumentException(
-                        "Unsupported notification type: "
-                                + event.getType()
+                        "Unsupported notification Channel: "
+                                + event.getChannel()
                 );
         }
     }

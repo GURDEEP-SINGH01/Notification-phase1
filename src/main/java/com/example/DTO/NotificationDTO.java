@@ -22,7 +22,9 @@ public class NotificationDTO {
     private String message;
 
     @NotBlank
-    private String type;
+    private String channel;
+
+    private String category;
 
     private boolean read;
 

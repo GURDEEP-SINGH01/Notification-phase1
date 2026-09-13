@@ -33,8 +33,9 @@ public class NotificationService {
 
         notification.setUserId(notificationDTO.getUserId());
         notification.setMessage(notificationDTO.getMessage());
-        notification.setType(notificationDTO.getType());
+        notification.setChannel(notificationDTO.getChannel());
         notification.setRead(notificationDTO.isRead());
+        notification.setCategory(notificationDTO.getCategory());
         notification.setExpiresAt( LocalDateTime.now().plusMinutes(ttlMinutes));
 
         Notification saved = notificationRepository.save(notification);
@@ -44,7 +45,8 @@ public class NotificationService {
         response.setId(saved.getId());
         response.setUserId(saved.getUserId());
         response.setMessage(saved.getMessage());
-        response.setType(saved.getType());
+        response.setChannel(saved.getChannel());
+        response.setCategory(saved.getCategory());
         response.setRead(saved.isRead());
         response.setCreatedAt(saved.getCreatedAt());
         response.setExpiresAt(saved.getExpiresAt());
@@ -55,7 +57,8 @@ public class NotificationService {
                 saved.getId(),
                 saved.getUserId(),
                 saved.getMessage(),
-                saved.getType()
+                saved.getChannel(),
+                saved.getCategory()
         );
         kafkaNotificationProducer.sendNotification(event);
 
@@ -74,7 +77,7 @@ public class NotificationService {
                     dto.setId(notification.getId());
                     dto.setUserId(notification.getUserId());
                     dto.setMessage(notification.getMessage());
-                    dto.setType(notification.getType());
+                    dto.setChannel(notification.getChannel());
                     dto.setRead(notification.isRead());
                     dto.setCreatedAt(notification.getCreatedAt());
                     dto.setExpiresAt(notification.getExpiresAt());
@@ -96,7 +99,7 @@ public class NotificationService {
         dto.setId(notification.getId());
         dto.setUserId(notification.getUserId());
         dto.setMessage(notification.getMessage());
-        dto.setType(notification.getType());
+        dto.setChannel(notification.getChannel());
         dto.setRead(notification.isRead());
         dto.setCreatedAt(notification.getCreatedAt());
         dto.setExpiresAt(notification.getExpiresAt());
@@ -115,7 +118,7 @@ public class NotificationService {
 
         notification.setUserId(notificationDTO.getUserId());
         notification.setMessage(notificationDTO.getMessage());
-        notification.setType(notificationDTO.getType());
+        notification.setChannel(notificationDTO.getChannel());
         notification.setRead(notificationDTO.isRead());
 
         Notification updated = notificationRepository.save(notification);
@@ -125,7 +128,7 @@ public class NotificationService {
         response.setId(updated.getId());
         response.setUserId(updated.getUserId());
         response.setMessage(updated.getMessage());
-        response.setType(updated.getType());
+        response.setChannel(updated.getChannel());
         response.setRead(updated.isRead());
         response.setCreatedAt(updated.getCreatedAt());
 
